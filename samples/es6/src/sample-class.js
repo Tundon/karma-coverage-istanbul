@@ -21,3 +21,13 @@ class Sample extends Array {
   }
 }
 
+class Unused {
+  constructor() {
+    console.log('It should be here')
+  }
+
+  do() {
+    // do some fun stuff
+    alert('wow')
+  }
+}

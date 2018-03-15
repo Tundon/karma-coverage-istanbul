@@ -1,9 +1,22 @@
-function createCoveragePreprocessor(...args) {
-  console.log(...args)
+const path = require('path')
+const istanbul = require('istanbul-api')
 
-  return function() {}
+function createCoveragePreprocessor() {
+  let instrumentor = istanbul.libInstrument.createInstrumenter()
+  return function(content, file, done) {
+    try {
+      let instrumented = instrumentor.instrumentSync(content, path.resolve(file.originalPath))
+      done(instrumented)
+    } catch (error) {
+      done(error.message)
+    }
+  }
 }
 
+createCoveragePreprocessor.$inject = [
+  // 'args', 'logger'
+]
+
 module.exports = {
-  'preprocessor:coverage': ['factory', createCoveragePreprocessor]
+  'preprocessor:coverage-istanbul': ['factory', createCoveragePreprocessor]
 }
